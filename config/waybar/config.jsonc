@@ -1,0 +1,77 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 28,
+    "spacing": 4,
+    "modules-left": ["clock"],
+    "modules-center": ["hyprland/workspaces"],
+    "modules-right": ["battery", "pulseaudio", "network", "custom/notification", "tray","custom/power"],
+    "hyprland/workspaces": {
+        "format": "{id}",
+        "on-click": "activate"
+    },
+    "clock": {
+        "format": "{:%H:%M}",
+        "format-alt": "{:%Y-%m-%d %H:%M}",
+        "tooltip-format": "{:%A, %d %B %Y}"
+    },
+    "battery": {
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-full": "󰁹",
+        "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "interval": 30,
+        "tooltip-format": "{capacity}% — {timeTo}",
+        "states": {
+            "warning": 30,
+            "critical": 15
+        }
+    },
+"pulseaudio": {
+    "format": "\ue953 {volume}%",
+    "format-muted": "\ue952",
+    "format-bluetooth": "\ue953 {volume}%",
+    "format-bluetooth-muted": "\ue952",
+    "on-click": "pavucontrol"
+},
+"network": {
+    "format-wifi": "\ue962 {signalStrength}%",
+    "format-ethernet": "ETH",
+    "format-disconnected": "\ue962 --",
+    "on-click": "nm-connection-editor",
+    "tooltip-format-wifi": "{essid} {signalStrength}%"
+},
+"custom/notification": {
+    "tooltip": false,
+    "format": "{icon}",
+    "format-icons": {
+        "notification": "\ue965",
+        "none": "\ue967",
+        "dnd-notification": "\ue966",
+        "dnd-none": "\ue966",
+        "inhibited-notification": "\ue965",
+        "inhibited-none": "\ue967",
+        "dnd-inhibited-notification": "\ue966",
+        "dnd-inhibited-none": "\ue966"
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
+},
+"custom/power": {
+    "format": "⏻",
+    "tooltip": false,
+    "menu": "on-click",
+    "menu-file": "~/.config/waybar/power_menu.xml",
+    "menu-actions": {
+        "lock": "hyprlock",
+        "logout": "hyprctl dispatch exit",
+        "suspend": "systemctl suspend",
+        "shutdown": "systemctl poweroff",
+        "reboot": "systemctl reboot"
+    }
+}    
+}

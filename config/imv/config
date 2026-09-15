@@ -1,0 +1,20 @@
+[options]
+background = 08100a
+overlay_font = JetBrainsMono Nerd Font:11
+overlay_text_color = b8d4bc
+overlay_background_color = 0e180f
+
+[binds]
+<Left> = prev
+<Right> = next
+j = next
+k = prev
++ = zoom 2
+- = zoom -2
+0 = reset_zoom
+r = rotate_clockwise
+R = rotate_anticlock
+f = fullscreen
+q = quit
+<Escape> = quit
+o = overlay

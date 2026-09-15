@@ -1,0 +1,67 @@
+{
+  "logo": {
+    "source": "/home/emn/.config/fastfetch/logos/warframe.png",
+    "type": "kitty-icat",
+    "width": 20,
+    "height": 20,
+    "padding": {
+      "top": 1,
+      "right": 4
+    }
+  },
+  "display": {
+    "separator": "  "
+  },
+  "modules": [
+    {
+      "type": "title",
+      "format": "Bienvenido Operador {1} de @{2}"
+    },
+    {
+      "type": "separator",
+      "string": "-",
+      "length": 40
+    },
+    {
+      "type": "os",
+      "key": "os",
+      "keyColor": "%%C1%%"
+    },
+    {
+      "type": "kernel",
+      "key": "krn",
+      "keyColor": "%%C1%%"
+    },
+    {
+      "type": "uptime",
+      "key": "up",
+      "keyColor": "%%C1%%"
+    },
+    {
+      "type": "shell",
+      "key": "sh",
+      "keyColor": "%%C2%%"
+    },
+    {
+      "type": "wm",
+      "key": "wm",
+      "keyColor": "%%C2%%"
+    },
+    {
+      "type": "cpu",
+      "key": "cpu",
+      "keyColor": "%%C3%%"
+    },
+    {
+      "type": "memory",
+      "key": "mem",
+      "keyColor": "%%C3%%"
+    },
+    {
+      "type": "battery",
+      "key": "bat",
+      "keyColor": "%%C4%%"
+    },
+    "break"
+  ]
+}

@@ -1,0 +1,75 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 28,
+    "spacing": 4,
+
+    "modules-left": ["hyprland/workspaces", "wlr/taskbar"],
+    "modules-center": ["clock"],
+    "modules-right": ["battery", "pulseaudio", "network", "cpu", "memory", "tray", "custom/power"],
+
+    "hyprland/workspaces": {
+        "format": "{id}",
+        "on-click": "activate"
+    },
+"wlr/taskbar": {
+    "format": "{icon}",
+    "icon-size": 16,
+    "tooltip-format": "{title}",
+    "on-click": "activate",
+    "on-click-middle": "close",
+    "all-outputs": false
+},
+
+    "clock": {
+        "format": "{:%H:%M}",
+        "format-alt": "{:%Y-%m-%d %H:%M}",
+        "tooltip-format": "{:%A, %d %B %Y}"
+    },
+
+      "battery": {
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-full": "󰁹",
+    "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+    "interval": 30,
+    "tooltip-format": "{capacity}% — {timeTo}",
+    "states": {
+        "warning": 30,
+        "critical": 15
+      }
+    },
+    "cpu": {
+        "format": "cpu {usage}%",
+        "interval": 2
+    },
+
+    "memory": {
+        "format": "mem {}%",
+        "interval": 2
+    },
+
+    "network": {
+        "format-wifi": "wifi {signalStrength}%",
+        "format-ethernet": "eth",
+        "format-disconnected": "offline",
+        "on-click": "nm-connection-editor",
+        "tooltip-format-wifi": "{essid}"
+    },
+
+    "pulseaudio": {
+        "format": "vol {volume}%",
+        "format-muted": "muted",
+        "on-click": "pavucontrol"
+    },
+
+    "tray": {
+        "spacing": 8
+    },
+
+    "custom/power": {
+        "format": "⏻",
+        "on-click": "wlogout",
+        "tooltip": false
+    }
+}

@@ -1,0 +1,75 @@
+* {
+    bg:         #08100aee;
+    bg-alt:     #0e180fee;
+    bg-hover:   #141f14;
+    border-col: #4e9e5a;
+    fg:         #b8d4bc;
+    fg-muted:   #5a7a5e;
+    accent:     #6abf74;
+    amber:      #c8a86a;
+
+    background-color: transparent;
+    text-color: @fg;
+}
+
+window {
+
+    background-color: #08100a;
+    border: 1px;
+    border-color: @border-col;
+    border-radius: 6px;
+    width: 480px;
+    padding: 12px;
+}
+
+mainbox {
+    background-color: transparent;
+    children: [inputbar, listview];
+    spacing: 8px;
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border-radius: 4px;
+    padding: 8px 12px;
+    children: [prompt, entry];
+    spacing: 8px;
+    enabled: true;
+}
+
+prompt {
+    text-color: @accent;
+}
+
+entry {
+    text-color: @fg;
+    placeholder: "buscar...";
+    placeholder-color: @fg-muted;
+}
+
+listview {
+    background-color: transparent;
+    lines: 8;
+    spacing: 2px;
+}
+
+element {
+    background-color: transparent;
+    border-radius: 4px;
+    padding: 6px 12px;
+    spacing: 8px;
+    children: [element-icon, element-text];
+}
+
+element selected {
+    background-color: @bg-hover;
+    text-color: @accent;
+}
+
+element-icon {
+    size: 16px;
+}
+
+element-text {
+    text-color: inherit;
+}

@@ -1,0 +1,27 @@
+@import "pom2"
+
+inputbar {
+    enabled: false;
+}
+
+mainbox {
+    children: [listview];
+}
+
+window {
+    width: 220px;
+}
+
+listview {
+    lines: 5;
+    spacing: 4px;
+}
+
+element {
+    padding: 10px 14px;
+}
+
+element selected {
+    background-color: #4e9e5a;
+    text-color: #08100a;
+}

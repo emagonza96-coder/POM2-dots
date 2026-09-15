@@ -1,0 +1,53 @@
+# POM-2 Zathura Config
+
+# Colores
+set default-bg "#08100a"
+set default-fg "#b8d4bc"
+
+set statusbar-bg "#0e180f"
+set statusbar-fg "#b8d4bc"
+
+set inputbar-bg "#0e180f"
+set inputbar-fg "#6abf74"
+
+set notification-bg "#0e180f"
+set notification-fg "#b8d4bc"
+set notification-error-bg "#08100a"
+set notification-error-fg "#c8a86a"
+set notification-warning-bg "#08100a"
+set notification-warning-fg "#c8a86a"
+
+set highlight-color "#4e9e5a"
+set highlight-active-color "#6abf74"
+
+set completion-bg "#0e180f"
+set completion-fg "#b8d4bc"
+set completion-highlight-bg "#4e9e5a"
+set completion-highlight-fg "#08100a"
+
+set recolor false
+set recolor-lightcolor "#08100a"
+set recolor-darkcolor "#b8d4bc"
+set recolor-keephue false
+
+# Comportamiento
+set font "JetBrainsMono Nerd Font 11"
+set window-title-basename true
+set statusbar-basename true
+set render-loading true
+set scroll-step 50
+set zoom-step 5
+set pages-per-row 1
+set scroll-page-aware true
+
+# Keybinds
+map j scroll down
+map k scroll up
+map h scroll left
+map l scroll right
+map r reload
+map R rotate
+map i recolor
+map f follow
+map J navigate next
+map K navigate previos

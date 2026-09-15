@@ -1,0 +1,139 @@
+@import 'colors.css';
+/* POM-2 GTK Theme */
+
+* {
+  color: #b8d4bc;
+  background-color: #08100a;
+  border-color: #1e2e1f;
+}
+
+window, .background {
+  background-color: #08100a;
+  color: #b8d4bc;
+}
+
+/* Barra de herramientas y headerbar */
+headerbar, toolbar, .toolbar {
+  background-color: #0e180f;
+  color: #b8d4bc;
+  border-bottom: 1px solid #1e2e1f;
+  box-shadow: none;
+}
+
+/* Sidebar (panel izquierdo de Thunar) */
+placessidebar, .sidebar {
+  background-color: #0e180f;
+  color: #b8d4bc;
+}
+
+placessidebar row:hover,
+.sidebar row:hover {
+  background-color: #1e2e1f;
+  color: #6abf74;
+}
+
+placessidebar row:selected,
+.sidebar row:selected {
+  background-color: #4e9e5a;
+  color: #08100a;
+}
+
+/* Lista de archivos */
+.view {
+  background-color: #08100a;
+  color: #b8d4bc;
+}
+
+.view:hover {
+  background-color: #0e180f;
+}
+
+.view:selected {
+  background-color: #4e9e5a;
+  color: #08100a;
+}
+
+/* Entradas de texto / barra de búsqueda */
+entry {
+  background-color: #0e180f;
+  color: #b8d4bc;
+  border: 1px solid #4e9e5a;
+  border-radius: 4px;
+}
+
+entry:focus {
+  border-color: #6abf74;
+}
+
+/* Botones */
+button {
+  background-color: #0e180f;
+  color: #b8d4bc;
+  border: 1px solid #1e2e1f;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #1e2e1f;
+  color: #6abf74;
+  border-color: #4e9e5a;
+}
+
+button:active {
+  background-color: #4e9e5a;
+  color: #08100a;
+}
+
+/* Menús contextuales */
+menu, menubar {
+  background-color: #0e180f;
+  color: #b8d4bc;
+  border: 1px solid #1e2e1f;
+}
+
+menuitem:hover {
+  background-color: #4e9e5a;
+  color: #08100a;
+}
+
+/* Scrollbar */
+scrollbar {
+  background-color: #08100a;
+}
+
+scrollbar slider {
+  background-color: #1e2e1f;
+  border-radius: 4px;
+  min-width: 6px;
+  min-height: 6px;
+}
+
+scrollbar slider:hover {
+  background-color: #4e9e5a;
+}
+
+/* Tooltips */
+tooltip {
+  background-color: #0e180f;
+  color: #c8a86a;
+  border: 1px solid #4e9e5a;
+  border-radius: 4px;
+}
+
+/* Tabs */
+notebook tab {
+  background-color: #0e180f;
+  color: #b8d4bc;
+  padding: 4px 12px;
+}
+
+notebook tab:checked {
+  background-color: #08100a;
+  color: #6abf74;
+  border-bottom: 2px solid #4e9e5a;
+}
+
+/* Separadores */
+separator {
+  background-color: #1e2e1f;
+}

@@ -1,0 +1,21 @@
+{
+   "logo": {
+       "type": "file",
+       "source": "/home/emn/.config/fish/warframe_ascii.txt"
+   },
+    "display": {
+        "separator": "  //  ",
+        "color": "green"
+    },
+    "modules": [
+        "break",
+        {"type": "os", "key": "OS", "keyColor": "green"},
+        {"type": "kernel", "key": "KRN", "keyColor": "green"},
+        {"type": "uptime", "key": "UP", "keyColor": "green"},
+        {"type": "shell", "key": "SH", "keyColor": "green"},
+        {"type": "wm", "key": "WM", "keyColor": "green"},
+        {"type": "cpu", "key": "CPU", "keyColor": "green"},
+        {"type": "memory", "key": "MEM", "keyColor": "green"},
+        {"type": "battery", "key": "BAT", "keyColor": "green"}
+    ]
+}

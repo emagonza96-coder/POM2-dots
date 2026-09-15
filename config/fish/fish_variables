@@ -1,0 +1,4 @@
+# This file contains fish universal variable definitions.
+# VERSION: 3.0
+SETUVAR __fish_initialized:4300
+SETUVAR fish_user_paths:/home/emn/\x2eopencode/bin\x1e/home/emn/\x2espicetify\x1e/home/emn/\x2elocal/bin

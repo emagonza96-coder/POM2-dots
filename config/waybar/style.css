@@ -1,0 +1,127 @@
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace,POM2Icons;
+    font-size: 12px;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+}
+
+window#waybar {
+    background-color: rgba(8, 16, 10, 0.90);
+    border-bottom: 1px solid #3a7a44;
+    color: #b8d4bc;
+}
+
+#workspaces button {
+    padding: 0 8px;
+    color: #5a7a5e;
+    background: transparent;
+}
+
+#workspaces button.active {
+    color: #6abf74;
+    border-bottom: 1px solid #4e9e5a;
+}
+
+#workspaces button:hover {
+    background: rgba(78, 158, 90, 0.10);
+    color: #b8d4bc;
+}
+
+#clock {
+    color: #6abf74;
+    font-weight: 500;
+    padding: 0 12px;
+}
+
+#cpu, #memory {
+    color: #5a7a5e;
+    padding: 0 8px;
+}
+
+#cpu.warning, #memory.warning {
+    color: #c8a86a;
+}
+
+#network {
+    color: #5a7a5e;
+    padding: 0 8px;
+}
+
+#network.disconnected {
+    color: #7a3a3a;
+}
+
+#pulseaudio {
+    color: #5a7a5e;
+    padding: 0 8px;
+}
+
+#pulseaudio.muted {
+    color: #3a7a44;
+}
+
+#tray {
+    padding: 0 8px;
+}
+#custom-power {
+    color: #c8a86a;
+    padding: 0 12px;
+    font-size: 14px;
+}
+
+#custom-power:hover {
+    color: #b8d4bc;
+}
+#battery {
+    color: #5a7a5e;
+    padding: 0 8px;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 14px;
+}
+
+#battery.warning {
+    color: #c8a86a;
+}
+
+#battery.critical {
+    color: #7a3a3a;
+}
+
+#battery.charging {
+    color: #6abf74;
+}
+#custom-spotify.inactive {
+    opacity: 0;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+}
+menu {
+    background-color: #0e180f;
+    border: 1px solid #4e9e5a;
+    border-radius: 8px;
+    padding: 4px;
+    color: #b8d4bc;
+}
+
+menuitem {
+    background-color: transparent;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-family: JetBrainsMono Nerd Font;
+    font-size: 12px;
+    color: #b8d4bc;
+}
+
+menuitem:hover {
+    background-color: #1e2e1f;
+    color: #6abf74;
+}
+
+separator {
+    background-color: #1e2e1f;
+    margin: 4px 8px;
+}
