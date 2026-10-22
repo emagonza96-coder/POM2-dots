@@ -1,6 +1,7 @@
 import Quickshell
 import Quickshell.Services.UPower
 import QtQuick
+import "../.."
 
 Item {
     id: batWrapper
@@ -13,14 +14,18 @@ Item {
     readonly property int level: Math.round(battery.percentage * 100)
 
     readonly property string icon: {
-        if (charging) return "\ue919 "
-        else if (level <= 100 && level > 70) return "\ue91a "
-        else if (level <= 70 && level > 60) return "\ue91b "
-        else if (level <= 60 && level > 20) return "\ue91c "
-        else if (level <= 20 && level > 10) return "\ue91d "
-        else if (level <= 10) return "\ue91e "
-        else return "\ue91a "
+        if (charging)        return "\ue919"
+        else if (level > 70) return "\ue91a"
+        else if (level > 60) return "\ue91b"
+        else if (level > 20) return "\ue91c"
+        else if (level > 10) return "\ue91d"
+        else                 return "\ue91e"
     }
+
+    readonly property color iconColor:
+        charging       ? Theme.accent :
+        level > 50     ? Theme.accent :
+        level > 20     ? Theme.amber  : Theme.red
 
     property string timeText: {
         let secs = charging ? battery.timeToFull : battery.timeToEmpty
@@ -30,6 +35,14 @@ Item {
         return h + "h " + m + "m"
     }
 
+    // Pulso suave cuando batería está crítica (<=10%)
+    SequentialAnimation {
+        running: !batWrapper.charging && batWrapper.level <= 10
+        loops: Animation.Infinite
+        NumberAnimation { target: batIconText; property: "opacity"; to: 0.3; duration: 700; easing.type: Easing.InOutSine }
+        NumberAnimation { target: batIconText; property: "opacity"; to: 1.0; duration: 700; easing.type: Easing.InOutSine }
+    }
+
     Row {
         id: batIcon
         spacing: 3
@@ -37,23 +50,25 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
 
         Text {
+            id: batIconText
             text: batWrapper.icon
-            font.family: "POM2Icons"
-            font.pixelSize: 12
-            color: batWrapper.charging ? "#6abf74"
-                                : batWrapper.level > 50 ? "#6abf74"
-                                : batWrapper.level > 20 ? "#c8a86a"
-                                : "#ff6b6b"
+            font.family: Theme.iconFont
+            font.pixelSize: Theme.fontSizeLg
+            color: batWrapper.iconColor
             anchors.verticalCenter: parent.verticalCenter
+            Behavior on color { ColorAnimation { duration: 300 } }
         }
 
         Text {
-            visible: batWrapper.expanded
+            id: batDetail
+            opacity: batWrapper.expanded ? 1.0 : 0.0
+            visible: opacity > 0
             text: batWrapper.level + "% · " + batWrapper.timeText
-            color: "#b8d4bc"
-            font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 12
+            color: Theme.text
+            font.family: Theme.font
+            font.pixelSize: Theme.fontSizeLg
             anchors.verticalCenter: parent.verticalCenter
+            Behavior on opacity { NumberAnimation { duration: 180; easing.type: Easing.OutQuad } }
         }
     }
 
@@ -61,6 +76,6 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
         onEntered: batWrapper.expanded = true
-        onExited: batWrapper.expanded = false
+        onExited:  batWrapper.expanded = false
     }
 }

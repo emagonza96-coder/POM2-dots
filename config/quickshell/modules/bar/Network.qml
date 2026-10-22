@@ -1,60 +1,153 @@
 import Quickshell
 import Quickshell.Networking
 import QtQuick
+import "../.."
 import "../popups"
 
 Item {
-   id: netRoot
-   width: expanded ? expandedRow.width : collapsed.width
-   height: 22
-   property bool expanded: false
+    id: netRoot
+    width: expanded ? expandedRow.implicitWidth : collapsed.implicitWidth
+    height: 26
+    property bool expanded: false
+    property bool hovered: false
 
-   property var activeDevice: Networking.devices.values.find(d => d.networks.values.some(n => n.connected))
-   property var activeNet: activeDevice ? activeDevice.networks.values.find(n => n.connected) : null
-   property int strength: activeNet && activeNet.signalStrength ? Math.round(activeNet.signalStrength * 100) : 100
+    property var activeDevice: Networking.devices.values.find(d => d.networks.values.some(n => n.connected))
+    property var activeNet: activeDevice ? activeDevice.networks.values.find(n => n.connected) : null
+    property int strength: activeNet && activeNet.signalStrength ? Math.round(activeNet.signalStrength * 100) : 100
 
-   Behavior on width { NumberAnimation { duration: 120 } }
+    readonly property bool isConnecting: {
+        if (networkPopup && networkPopup.connectingSsid !== "") return true
+        for (let i = 0; i < Networking.devices.values.length; i++) {
+            let d = Networking.devices.values[i]
+            if (d.state === ConnectionState.Connecting) return true
+            for (let j = 0; j < d.networks.values.length; j++) {
+                let n = d.networks.values[j]
+                if (n.state === ConnectionState.Connecting || (n.stateChanging && !n.connected)) return true
+            }
+        }
+        return false
+    }
 
-   Row {
-       id: collapsed
-       visible: !netRoot.expanded
-       spacing: 4
-       anchors.verticalCenter: parent.verticalCenter
-       Text {
-           font.family: "POM2Icons"; font.pixelSize: 14; color: "#6abf74"
-           text: netRoot.activeNet ? "\ue9e7" : "\ue9e8"
-           anchors.verticalCenter: parent.verticalCenter
-       }
-   }
+    readonly property string connectingName: {
+        if (networkPopup && networkPopup.connectingSsid !== "") return networkPopup.connectingSsid
+        for (let i = 0; i < Networking.devices.values.length; i++) {
+            let d = Networking.devices.values[i]
+            for (let j = 0; j < d.networks.values.length; j++) {
+                let n = d.networks.values[j]
+                if (n.state === ConnectionState.Connecting || (n.stateChanging && !n.connected)) return n.name
+            }
+        }
+        return ""
+    }
 
-   Row {
-       id: expandedRow
-       visible: netRoot.expanded
-       spacing: 6
-       anchors.verticalCenter: parent.verticalCenter
-       Text {
-           font.family: "POM2Icons"; font.pixelSize: 14; color: "#6abf74"
-           text: "\ue9e7"
-           anchors.verticalCenter: parent.verticalCenter
-       }
-       Text {
-           font.family: "JetBrainsMono Nerd Font"; font.pixelSize: 12; color: "#b8d4bc"
-           text: (netRoot.activeNet ? netRoot.activeNet.ssid : "Sin red") + " · " + netRoot.strength + "%"
-           anchors.verticalCenter: parent.verticalCenter
-       }
-   }
+    Behavior on width { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
 
-   MouseArea {
-       anchors.fill: parent
-       hoverEnabled: true
-       onEntered: netRoot.expanded = true
-       onExited: netRoot.expanded = false
-       onClicked: networkPopup.visible = !networkPopup.visible
-   }
+    // Ícono colapsado
+    Row {
+        id: collapsed
+        visible: !netRoot.expanded
+        opacity: netRoot.expanded ? 0 : 1
+        spacing: 4
+        anchors.verticalCenter: parent.verticalCenter
+        Behavior on opacity { NumberAnimation { duration: 120 } }
 
-   NetworkPopup {
-       id: networkPopup
-       visible: false
-       parentAnchor: netRoot
-   }
+        SequentialAnimation on opacity {
+            running: netRoot.isConnecting && !netRoot.expanded
+            loops: Animation.Infinite
+            NumberAnimation { to: 0.35; duration: 500; easing.type: Easing.InOutQuad }
+            NumberAnimation { to: 1.0; duration: 500; easing.type: Easing.InOutQuad }
+        }
+
+        Item {
+            width: 14; height: 14
+            anchors.verticalCenter: parent.verticalCenter
+
+            Text {
+                anchors.centerIn: parent
+                visible: !netRoot.isConnecting
+                font.family: Theme.iconFont; font.pixelSize: 14
+                color: netRoot.hovered ? Theme.accent : (netRoot.activeNet ? Theme.accent : Theme.muted)
+                text: netRoot.activeNet ? "\ue9e7" : "\ue9e8"
+                Behavior on color { ColorAnimation { duration: 150 } }
+            }
+
+            Text {
+                id: colIconSpin
+                anchors.centerIn: parent
+                visible: netRoot.isConnecting
+                font.family: Theme.font; font.pixelSize: 12
+                color: Theme.amber
+                text: "󰑐"
+                transformOrigin: Item.Center
+
+                NumberAnimation on rotation {
+                    running: netRoot.isConnecting && !netRoot.expanded
+                    from: 0; to: 360; duration: 1000; loops: Animation.Infinite
+                    onRunningChanged: { if (!running) colIconSpin.rotation = 0 }
+                }
+            }
+        }
+    }
+
+    // Vista expandida
+    Row {
+        id: expandedRow
+        visible: netRoot.expanded
+        opacity: netRoot.expanded ? 1 : 0
+        spacing: 6
+        anchors.verticalCenter: parent.verticalCenter
+        Behavior on opacity { NumberAnimation { duration: 180; easing.type: Easing.OutQuad } }
+
+        Item {
+            width: 14; height: 14
+            anchors.verticalCenter: parent.verticalCenter
+
+            Text {
+                anchors.centerIn: parent
+                visible: !netRoot.isConnecting
+                font.family: Theme.iconFont; font.pixelSize: 14
+                color: netRoot.activeNet ? Theme.accent : Theme.muted
+                text: netRoot.activeNet ? "\ue9e7" : "\ue9e8"
+            }
+
+            Text {
+                id: expIconSpin
+                anchors.centerIn: parent
+                visible: netRoot.isConnecting
+                font.family: Theme.font; font.pixelSize: 12
+                color: Theme.amber
+                text: "󰑐"
+                transformOrigin: Item.Center
+
+                NumberAnimation on rotation {
+                    running: netRoot.isConnecting && netRoot.expanded
+                    from: 0; to: 360; duration: 1000; loops: Animation.Infinite
+                    onRunningChanged: { if (!running) expIconSpin.rotation = 0 }
+                }
+            }
+        }
+
+        Text {
+            font.family: Theme.font; font.pixelSize: Theme.fontSizeLg
+            color: netRoot.isConnecting ? Theme.amber : Theme.text
+            text: netRoot.isConnecting
+                  ? (netRoot.connectingName !== "" ? "Conectando a " + netRoot.connectingName + "..." : "Conectando...")
+                  : ((netRoot.activeNet ? netRoot.activeNet.name : "Sin red") + (netRoot.activeNet ? " · " + netRoot.strength + "%" : ""))
+            anchors.verticalCenter: parent.verticalCenter
+        }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+        onEntered: { netRoot.hovered = true;  netRoot.expanded = true  }
+        onExited:  { netRoot.hovered = false; netRoot.expanded = false }
+        onClicked: networkPopup.visible = !networkPopup.visible
+    }
+
+    NetworkPopup {
+        id: networkPopup
+        visible: false
+        parentAnchor: netRoot
+    }
 }

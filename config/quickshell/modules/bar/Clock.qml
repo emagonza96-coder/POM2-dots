@@ -3,18 +3,40 @@ import "../.."
 
 Text {
     id: clockText
-    color: Theme.accent
+    color: hovered ? Theme.text : Theme.accent
     font.family: Theme.font
-    font.pixelSize: Theme.fontSize
+    font.pixelSize: Theme.fontSizeLg
     anchors.verticalCenter: parent.verticalCenter
-    property bool hover: false
+    property bool hovered: false
+
+    Behavior on color { ColorAnimation { duration: 180 } }
+    Behavior on opacity { NumberAnimation { duration: 120 } }
+
+    function switchText(next) {
+        // Fade out → cambiar → fade in
+        fadeOut.nextText = next
+        fadeOut.start()
+    }
 
     function updateText() {
-        if (hover) {
-            clockText.text = new Date().toLocaleDateString([], { day: '2-digit', month: 'short', year: 'numeric' })
+        let next
+        if (hovered) {
+            next = new Date().toLocaleDateString([], { day: '2-digit', month: 'short', year: 'numeric' })
         } else {
-            clockText.text = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            next = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
+        // Solo animar si el texto cambió
+        if (next !== clockText.text) {
+            clockText.switchText(next)
+        }
+    }
+
+    SequentialAnimation {
+        id: fadeOut
+        property string nextText: ""
+        NumberAnimation { target: clockText; property: "opacity"; to: 0; duration: 80; easing.type: Easing.InQuad }
+        ScriptAction { script: { clockText.text = fadeOut.nextText } }
+        NumberAnimation { target: clockText; property: "opacity"; to: 1; duration: 120; easing.type: Easing.OutQuad }
     }
 
     Timer {
@@ -28,7 +50,7 @@ Text {
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
-        onEntered: { clockText.hover = true; clockText.updateText() }
-        onExited: { clockText.hover = false; clockText.updateText() }
+        onEntered: { clockText.hovered = true;  clockText.updateText() }
+        onExited:  { clockText.hovered = false; clockText.updateText() }
     }
 }
