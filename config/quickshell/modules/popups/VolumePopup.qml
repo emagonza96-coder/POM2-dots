@@ -41,6 +41,15 @@ PopupWindow {
         return "󰁺"
     }
 
+    Component.onCompleted: {
+        if (visible) {
+            container.opacity = 1
+            slideTranslate.y = 0
+            statusProc.running = true
+            btStatusProc.running = true
+        }
+    }
+
     onVisibleChanged: {
         if (visible) {
             fadeIn.start()
@@ -49,6 +58,8 @@ PopupWindow {
             btStatusProc.running = true
         } else {
             selectedAppForSinkMenu = -1
+            container.opacity = 0
+            slideTranslate.y = -6
         }
     }
 

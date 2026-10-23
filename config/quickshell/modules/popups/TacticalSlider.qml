@@ -15,13 +15,17 @@ Item {
     signal committed(real val)
 
     readonly property bool dragging: mouseArea.pressed
+    readonly property bool hovered: mouseArea.containsMouse
     readonly property real normalized: Math.max(0, Math.min(1.0, maxVal > 0 ? value / maxVal : 0))
+    readonly property int overdriveThreshold: allowOverdrive ? Math.round((1.0 / maxVal) * totalBlocks) : 999
 
+    // Fila de bloques segmentados (VU-meter horizontal táctico POM-2)
     Row {
         id: blocksRow
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.right: parent.right
+        height: 14
         spacing: 2
 
         readonly property real blockWidth: Math.max(2, (width - ((sliderRoot.totalBlocks - 1) * spacing)) / sliderRoot.totalBlocks)
@@ -31,62 +35,75 @@ Item {
             model: sliderRoot.totalBlocks
             Rectangle {
                 required property int index
+                readonly property bool isActive: index < blocksRow.activeBlocks
+                readonly property bool isOverdrive: sliderRoot.allowOverdrive && index >= sliderRoot.overdriveThreshold
+
                 width: blocksRow.blockWidth
-                height: sliderRoot.dragging ? 12 : 8
+                height: parent.height
                 radius: 0
 
-                readonly property bool isActive: index < blocksRow.activeBlocks
-                readonly property bool isOverdrive: sliderRoot.allowOverdrive && index >= 11 // > 100% de volumen
-
-                color: !isActive ? "#121f14"
+                color: !isActive ? "#0d180f"
                      : sliderRoot.muted ? Theme.muted
                      : isOverdrive ? Theme.amber
-                     : Theme.accent
+                     : (sliderRoot.hovered ? "#7cd486" : Theme.accent)
 
-                border.color: !isActive ? "#1a2c1d"
+                border.color: !isActive ? "#132416"
                             : sliderRoot.muted ? Theme.muted
                             : isOverdrive ? Theme.amber
                             : Theme.border
                 border.width: 1
 
-                Behavior on height { NumberAnimation { duration: 90; easing.type: Easing.OutQuad } }
-                Behavior on color  { ColorAnimation  { duration: 50 } }
+                Behavior on color { ColorAnimation { duration: 50 } }
             }
         }
     }
 
-    // Agarre táctico con indicador ">"
+    // Indicador / Agarre táctico iluminado en el nivel activo (estilo HUD / corchete [ | ])
     Rectangle {
-        id: grip
-        width: 14
-        height: sliderRoot.dragging ? 18 : 15
+        id: levelGrip
+        width: 4
+        height: 18
         radius: 0
-        color: sliderRoot.dragging ? "#142616" : "#0a130b"
-        border.color: sliderRoot.dragging ? Theme.accent : Theme.border
-        border.width: 1
         anchors.verticalCenter: parent.verticalCenter
-        x: Math.max(0, Math.min(parent.width - width, sliderRoot.normalized * (parent.width - width)))
+        x: Math.max(0, Math.min(sliderRoot.width - width, sliderRoot.normalized * (sliderRoot.width - width)))
 
-        Behavior on height       { NumberAnimation { duration: 90; easing.type: Easing.OutQuad } }
-        Behavior on color        { ColorAnimation  { duration: 90 } }
-        Behavior on border.color { ColorAnimation  { duration: 90 } }
-        Behavior on x            { NumberAnimation { duration: 40 } }
+        readonly property bool inOverdrive: sliderRoot.allowOverdrive && sliderRoot.normalized >= (sliderRoot.overdriveThreshold / sliderRoot.totalBlocks)
+        readonly property color gripColor: sliderRoot.muted ? Theme.muted
+                                         : inOverdrive ? Theme.amber
+                                         : (sliderRoot.dragging ? "#a3e8ab" : (sliderRoot.hovered ? "#7cd486" : Theme.accent))
 
-        Text {
+        color: levelGrip.gripColor
+
+        Behavior on x     { NumberAnimation { duration: sliderRoot.dragging ? 0 : 40 } }
+        Behavior on color { ColorAnimation  { duration: 80 } }
+
+        // Muesca superior del corchete táctico
+        Rectangle {
+            width: 8
+            height: 2
+            radius: 0
             anchors.centerIn: parent
-            anchors.horizontalCenterOffset: 0.5
-            text: ">"
-            font.family: Theme.font
-            font.pixelSize: 10
-            font.bold: true
-            color: sliderRoot.dragging ? Theme.accent : (sliderRoot.muted ? Theme.muted : Theme.text)
-            Behavior on color { ColorAnimation { duration: 90 } }
+            anchors.verticalCenterOffset: -parent.height / 2
+            color: levelGrip.gripColor
+            Behavior on color { ColorAnimation { duration: 80 } }
+        }
+
+        // Muesca inferior del corchete táctico
+        Rectangle {
+            width: 8
+            height: 2
+            radius: 0
+            anchors.centerIn: parent
+            anchors.verticalCenterOffset: parent.height / 2
+            color: levelGrip.gripColor
+            Behavior on color { ColorAnimation { duration: 80 } }
         }
     }
 
     MouseArea {
         id: mouseArea
         anchors.fill: parent
+        hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
         onPositionChanged: (mouse) => {
             if (pressed) {
@@ -97,6 +114,11 @@ Item {
         onClicked: (mouse) => {
             let ratio = Math.max(0, Math.min(1.0, mouse.x / width))
             sliderRoot.committed(ratio * sliderRoot.maxVal)
+        }
+        onWheel: (wheel) => {
+            let step = (wheel.angleDelta.y > 0 ? 0.05 : -0.05) * sliderRoot.maxVal
+            let next = Math.max(0.0, Math.min(sliderRoot.maxVal, sliderRoot.value + step))
+            sliderRoot.committed(next)
         }
     }
 }
