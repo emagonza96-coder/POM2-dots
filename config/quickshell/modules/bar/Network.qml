@@ -11,18 +11,20 @@ Item {
     property bool expanded: false
     property bool hovered: false
 
-    property var activeDevice: Networking.devices.values.find(d => d.networks.values.some(n => n.connected))
-    property var activeNet: activeDevice ? activeDevice.networks.values.find(n => n.connected) : null
+    property var activeDevice: Networking.devices.values.find(d => d && d.networks && d.networks.values && d.networks.values.some(n => n && n.connected))
+    property var activeNet: (activeDevice && activeDevice.networks && activeDevice.networks.values) ? activeDevice.networks.values.find(n => n && n.connected) : null
     property int strength: activeNet && activeNet.signalStrength ? Math.round(activeNet.signalStrength * 100) : 100
 
     readonly property bool isConnecting: {
         if (networkPopup && networkPopup.connectingSsid !== "") return true
         for (let i = 0; i < Networking.devices.values.length; i++) {
             let d = Networking.devices.values[i]
-            if (d.state === ConnectionState.Connecting) return true
-            for (let j = 0; j < d.networks.values.length; j++) {
-                let n = d.networks.values[j]
-                if (n.state === ConnectionState.Connecting || (n.stateChanging && !n.connected)) return true
+            if (d && d.state === ConnectionState.Connecting) return true
+            if (d && d.networks && d.networks.values) {
+                for (let j = 0; j < d.networks.values.length; j++) {
+                    let n = d.networks.values[j]
+                    if (n && (n.state === ConnectionState.Connecting || (n.stateChanging && !n.connected))) return true
+                }
             }
         }
         return false
@@ -32,9 +34,11 @@ Item {
         if (networkPopup && networkPopup.connectingSsid !== "") return networkPopup.connectingSsid
         for (let i = 0; i < Networking.devices.values.length; i++) {
             let d = Networking.devices.values[i]
-            for (let j = 0; j < d.networks.values.length; j++) {
-                let n = d.networks.values[j]
-                if (n.state === ConnectionState.Connecting || (n.stateChanging && !n.connected)) return n.name
+            if (d && d.networks && d.networks.values) {
+                for (let j = 0; j < d.networks.values.length; j++) {
+                    let n = d.networks.values[j]
+                    if (n && (n.state === ConnectionState.Connecting || (n.stateChanging && !n.connected))) return n.name
+                }
             }
         }
         return ""

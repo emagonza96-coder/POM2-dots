@@ -59,9 +59,20 @@ PopupWindow {
         color: Theme.surface
         border.color: Theme.border
         border.width: 1
-        radius: 8
+        radius: 0
+        clip: true
         opacity: 0
         transform: Translate { id: slideTranslate; y: -6 }
+
+        // Muescas tácticas iluminadas en las 4 esquinas del popup en verde POM-2
+        Rectangle { width: 6; height: 1; color: Theme.accent; anchors.top: parent.top; anchors.left: parent.left }
+        Rectangle { width: 1; height: 6; color: Theme.accent; anchors.top: parent.top; anchors.left: parent.left }
+        Rectangle { width: 6; height: 1; color: Theme.accent; anchors.top: parent.top; anchors.right: parent.right }
+        Rectangle { width: 1; height: 6; color: Theme.accent; anchors.top: parent.top; anchors.right: parent.right }
+        Rectangle { width: 6; height: 1; color: Theme.accent; anchors.bottom: parent.bottom; anchors.left: parent.left }
+        Rectangle { width: 1; height: 6; color: Theme.accent; anchors.bottom: parent.bottom; anchors.left: parent.left }
+        Rectangle { width: 6; height: 1; color: Theme.accent; anchors.bottom: parent.bottom; anchors.right: parent.right }
+        Rectangle { width: 1; height: 6; color: Theme.accent; anchors.bottom: parent.bottom; anchors.right: parent.right }
 
         NumberAnimation { id: fadeIn;  target: container;      property: "opacity"; from: 0;  to: 1; duration: 180; easing.type: Easing.OutQuad }
         NumberAnimation { id: slideIn; target: slideTranslate; property: "y";       from: -6; to: 0; duration: 180; easing.type: Easing.OutQuad }
@@ -113,7 +124,7 @@ PopupWindow {
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 height: 2
                                 width: tabAudioBtn.isActive ? parent.width * 0.65 : 0
-                                radius: 1
+                                radius: 0
                                 color: Theme.accent
                                 Behavior on width { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
                             }
@@ -168,7 +179,7 @@ PopupWindow {
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 height: 2
                                 width: tabBtBtn.isActive ? parent.width * 0.65 : 0
-                                radius: 1
+                                radius: 0
                                 color: Theme.accent
                                 Behavior on width { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
                             }
@@ -242,7 +253,7 @@ PopupWindow {
                                 id: sinkCard
                                 width: parent.width
                                 implicitHeight: sinkCol.implicitHeight + 14
-                                radius: 6
+                                radius: 0
                                 
                                 readonly property string sinkName: modelData.name
                                 readonly property int sinkId: modelData.id
@@ -255,6 +266,17 @@ PopupWindow {
                                 color: isDefault ? "#0f1c11" : "#09130b"
                                 border.color: isDefault ? Theme.accent : Theme.separator
                                 border.width: 1
+
+                                // Esquinas tácticas iluminadas
+                                readonly property color cornerColor: isDefault ? Theme.accent : Theme.border
+                                Rectangle { width: 5; height: 1; color: sinkCard.cornerColor; anchors.top: parent.top; anchors.left: parent.left }
+                                Rectangle { width: 1; height: 5; color: sinkCard.cornerColor; anchors.top: parent.top; anchors.left: parent.left }
+                                Rectangle { width: 5; height: 1; color: sinkCard.cornerColor; anchors.top: parent.top; anchors.right: parent.right }
+                                Rectangle { width: 1; height: 5; color: sinkCard.cornerColor; anchors.top: parent.top; anchors.right: parent.right }
+                                Rectangle { width: 5; height: 1; color: sinkCard.cornerColor; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                                Rectangle { width: 1; height: 5; color: sinkCard.cornerColor; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                                Rectangle { width: 5; height: 1; color: sinkCard.cornerColor; anchors.bottom: parent.bottom; anchors.right: parent.right }
+                                Rectangle { width: 1; height: 5; color: sinkCard.cornerColor; anchors.bottom: parent.bottom; anchors.right: parent.right }
 
                                 Column {
                                     id: sinkCol
@@ -292,7 +314,7 @@ PopupWindow {
                                             visible: modelData.battery !== null && modelData.battery !== undefined
                                             height: 15
                                             width: sinkBatRow.implicitWidth + 8
-                                            radius: 3
+                                            radius: 0
                                             color: (modelData.battery !== null && modelData.battery < 25) ? "#2b1a10" : "#132515"
                                             border.color: (modelData.battery !== null && modelData.battery < 25) ? Theme.amber : Theme.accent
                                             border.width: 1
@@ -329,7 +351,7 @@ PopupWindow {
                                             id: masterToggleBtn
                                             height: 20
                                             width: masterToggleRow.implicitWidth + 12
-                                            radius: 4
+                                            radius: 0
                                             anchors.verticalCenter: parent.verticalCenter
                                             
                                             color: sinkCard.isDefault ? "#1a331c" : (masterMouse.containsMouse ? "#142416" : "#0d180f")
@@ -374,7 +396,7 @@ PopupWindow {
                                         // Botón mute salida individual
                                         Rectangle {
                                             id: sinkMuteBtn
-                                            width: 22; height: 22; radius: 5
+                                            width: 22; height: 22; radius: 0
                                             color: sinkMuteHover.containsMouse ? (sinkCard.sinkMuted ? "#3a2a0a" : "#122212") : "transparent"
                                             border.color: sinkCard.sinkMuted ? Theme.amber : Theme.border
                                             anchors.verticalCenter: parent.verticalCenter
@@ -458,10 +480,20 @@ PopupWindow {
                         Rectangle {
                             width: parent.width
                             height: 36
-                            radius: 6
+                            radius: 0
                             color: "#09120b"
                             border.color: Theme.separator
+                            border.width: 1
                             visible: popup.appsList.length === 0
+
+                            Rectangle { width: 4; height: 1; color: Theme.border; anchors.top: parent.top; anchors.left: parent.left }
+                            Rectangle { width: 1; height: 4; color: Theme.border; anchors.top: parent.top; anchors.left: parent.left }
+                            Rectangle { width: 4; height: 1; color: Theme.border; anchors.top: parent.top; anchors.right: parent.right }
+                            Rectangle { width: 1; height: 4; color: Theme.border; anchors.top: parent.top; anchors.right: parent.right }
+                            Rectangle { width: 4; height: 1; color: Theme.border; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                            Rectangle { width: 1; height: 4; color: Theme.border; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                            Rectangle { width: 4; height: 1; color: Theme.border; anchors.bottom: parent.bottom; anchors.right: parent.right }
+                            Rectangle { width: 1; height: 4; color: Theme.border; anchors.bottom: parent.bottom; anchors.right: parent.right }
 
                             Text {
                                 anchors.centerIn: parent
@@ -479,10 +511,20 @@ PopupWindow {
                                 id: appCard
                                 width: parent.width
                                 implicitHeight: appCol.implicitHeight + 14
-                                radius: 6
+                                radius: 0
                                 color: "#0a140c"
                                 border.color: Theme.separator
                                 border.width: 1
+
+                                // Esquinas tácticas iluminadas
+                                Rectangle { width: 5; height: 1; color: Theme.border; anchors.top: parent.top; anchors.left: parent.left }
+                                Rectangle { width: 1; height: 5; color: Theme.border; anchors.top: parent.top; anchors.left: parent.left }
+                                Rectangle { width: 5; height: 1; color: Theme.border; anchors.top: parent.top; anchors.right: parent.right }
+                                Rectangle { width: 1; height: 5; color: Theme.border; anchors.top: parent.top; anchors.right: parent.right }
+                                Rectangle { width: 5; height: 1; color: Theme.border; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                                Rectangle { width: 1; height: 5; color: Theme.border; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                                Rectangle { width: 5; height: 1; color: Theme.border; anchors.bottom: parent.bottom; anchors.right: parent.right }
+                                Rectangle { width: 1; height: 5; color: Theme.border; anchors.bottom: parent.bottom; anchors.right: parent.right }
 
                                 readonly property int appId: modelData.id
                                 readonly property string appName: modelData.name
@@ -532,7 +574,7 @@ PopupWindow {
                                         id: appSinkChip
                                         height: 20
                                         width: appSinkRow.implicitWidth + 12
-                                        radius: 4
+                                        radius: 0
                                         anchors.verticalCenter: parent.verticalCenter
                                         property bool isOpen: popup.selectedAppForSinkMenu === appCard.appId
                                         color: isOpen ? "#162818" : (appSinkMouse.containsMouse ? "#112013" : "#0e1a10")
@@ -610,7 +652,7 @@ PopupWindow {
                                             id: appSinkOption
                                             width: parent.width
                                             height: 22
-                                            radius: 4
+                                            radius: 0
                                             property bool isSelected: modelData.id === appCard.appSinkId || modelData.name === appCard.appSinkName
                                             color: optionMouse.containsMouse ? "#142416" : (isSelected ? "#0f1c11" : "transparent")
                                             border.color: isSelected ? Theme.accent : "transparent"
@@ -675,7 +717,7 @@ PopupWindow {
                                     // Botón mute app
                                     Rectangle {
                                         id: appMuteBtn
-                                        width: 20; height: 20; radius: 5
+                                        width: 20; height: 20; radius: 0
                                         color: appMuteHover.containsMouse ? (appCard.appMuted ? "#3a2a0a" : "#122212") : "transparent"
                                         border.color: appCard.appMuted ? Theme.amber : Theme.border
                                         anchors.verticalCenter: parent.verticalCenter
@@ -749,12 +791,24 @@ PopupWindow {
 
                     // Cabecera: Adaptador Bluetooth (Power + Scan)
                     Rectangle {
+                        id: btAdapterCard
                         width: parent.width
                         height: 42
-                        radius: 6
+                        radius: 0
                         color: "#0a140c"
                         border.color: Theme.separator
                         border.width: 1
+
+                        // Esquinas tácticas iluminadas
+                        readonly property color cornerColor: popup.btPowered ? Theme.accent : Theme.border
+                        Rectangle { width: 5; height: 1; color: btAdapterCard.cornerColor; anchors.top: parent.top; anchors.left: parent.left }
+                        Rectangle { width: 1; height: 5; color: btAdapterCard.cornerColor; anchors.top: parent.top; anchors.left: parent.left }
+                        Rectangle { width: 5; height: 1; color: btAdapterCard.cornerColor; anchors.top: parent.top; anchors.right: parent.right }
+                        Rectangle { width: 1; height: 5; color: btAdapterCard.cornerColor; anchors.top: parent.top; anchors.right: parent.right }
+                        Rectangle { width: 5; height: 1; color: btAdapterCard.cornerColor; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                        Rectangle { width: 1; height: 5; color: btAdapterCard.cornerColor; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                        Rectangle { width: 5; height: 1; color: btAdapterCard.cornerColor; anchors.bottom: parent.bottom; anchors.right: parent.right }
+                        Rectangle { width: 1; height: 5; color: btAdapterCard.cornerColor; anchors.bottom: parent.bottom; anchors.right: parent.right }
 
                         Row {
                             anchors.fill: parent
@@ -797,7 +851,7 @@ PopupWindow {
                                 id: powerBtn
                                 width: powerRow.implicitWidth + 14
                                 height: 24
-                                radius: 5
+                                radius: 0
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: popup.btPowered ? "#162a18" : "#201212"
                                 border.color: popup.btPowered ? Theme.accent : Theme.amber
@@ -837,12 +891,24 @@ PopupWindow {
 
                     // Botón prominente para Buscar Nuevos Dispositivos
                     Rectangle {
+                        id: btSearchBtn
                         width: parent.width
                         height: 32
-                        radius: 6
+                        radius: 0
                         color: popup.btDiscovering ? (searchMouse.containsMouse ? "#241414" : "#1a0f0f") : (searchMouse.containsMouse ? "#122014" : "#0d180f")
                         border.color: popup.btDiscovering ? Theme.amber : Theme.border
                         border.width: 1
+
+                        // Esquinas tácticas iluminadas
+                        readonly property color cornerColor: popup.btDiscovering ? Theme.amber : (searchMouse.containsMouse ? Theme.accent : Theme.border)
+                        Rectangle { width: 5; height: 1; color: btSearchBtn.cornerColor; anchors.top: parent.top; anchors.left: parent.left }
+                        Rectangle { width: 1; height: 5; color: btSearchBtn.cornerColor; anchors.top: parent.top; anchors.left: parent.left }
+                        Rectangle { width: 5; height: 1; color: btSearchBtn.cornerColor; anchors.top: parent.top; anchors.right: parent.right }
+                        Rectangle { width: 1; height: 5; color: btSearchBtn.cornerColor; anchors.top: parent.top; anchors.right: parent.right }
+                        Rectangle { width: 5; height: 1; color: btSearchBtn.cornerColor; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                        Rectangle { width: 1; height: 5; color: btSearchBtn.cornerColor; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                        Rectangle { width: 5; height: 1; color: btSearchBtn.cornerColor; anchors.bottom: parent.bottom; anchors.right: parent.right }
+                        Rectangle { width: 1; height: 5; color: btSearchBtn.cornerColor; anchors.bottom: parent.bottom; anchors.right: parent.right }
 
                         Behavior on color { ColorAnimation { duration: 120 } }
                         Behavior on border.color { ColorAnimation { duration: 150 } }
@@ -909,10 +975,20 @@ PopupWindow {
                         Rectangle {
                             width: parent.width
                             height: 32
-                            radius: 6
+                            radius: 0
                             color: "#09120b"
                             border.color: Theme.separator
+                            border.width: 1
                             visible: popup.btPairedDevices.length === 0
+
+                            Rectangle { width: 4; height: 1; color: Theme.border; anchors.top: parent.top; anchors.left: parent.left }
+                            Rectangle { width: 1; height: 4; color: Theme.border; anchors.top: parent.top; anchors.left: parent.left }
+                            Rectangle { width: 4; height: 1; color: Theme.border; anchors.top: parent.top; anchors.right: parent.right }
+                            Rectangle { width: 1; height: 4; color: Theme.border; anchors.top: parent.top; anchors.right: parent.right }
+                            Rectangle { width: 4; height: 1; color: Theme.border; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                            Rectangle { width: 1; height: 4; color: Theme.border; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                            Rectangle { width: 4; height: 1; color: Theme.border; anchors.bottom: parent.bottom; anchors.right: parent.right }
+                            Rectangle { width: 1; height: 4; color: Theme.border; anchors.bottom: parent.bottom; anchors.right: parent.right }
 
                             Text {
                                 anchors.centerIn: parent
@@ -931,7 +1007,7 @@ PopupWindow {
                                 id: pairedDevCard
                                 width: parent.width
                                 height: 44
-                                radius: 6
+                                radius: 0
                                 
                                 readonly property string devMac: modelData.mac
                                 readonly property string devName: modelData.name || devMac
@@ -942,6 +1018,17 @@ PopupWindow {
                                 color: isConnected ? "#0f1c11" : (isConnecting ? "#19150b" : "#09130b")
                                 border.color: isConnected ? Theme.accent : (isConnecting ? Theme.amber : Theme.separator)
                                 border.width: 1
+
+                                // Esquinas tácticas iluminadas
+                                readonly property color cornerColor: isConnected ? Theme.accent : (isConnecting ? Theme.amber : Theme.border)
+                                Rectangle { width: 5; height: 1; color: pairedDevCard.cornerColor; anchors.top: parent.top; anchors.left: parent.left }
+                                Rectangle { width: 1; height: 5; color: pairedDevCard.cornerColor; anchors.top: parent.top; anchors.left: parent.left }
+                                Rectangle { width: 5; height: 1; color: pairedDevCard.cornerColor; anchors.top: parent.top; anchors.right: parent.right }
+                                Rectangle { width: 1; height: 5; color: pairedDevCard.cornerColor; anchors.top: parent.top; anchors.right: parent.right }
+                                Rectangle { width: 5; height: 1; color: pairedDevCard.cornerColor; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                                Rectangle { width: 1; height: 5; color: pairedDevCard.cornerColor; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                                Rectangle { width: 5; height: 1; color: pairedDevCard.cornerColor; anchors.bottom: parent.bottom; anchors.right: parent.right }
+                                Rectangle { width: 1; height: 5; color: pairedDevCard.cornerColor; anchors.bottom: parent.bottom; anchors.right: parent.right }
 
                                 Behavior on color { ColorAnimation { duration: 150 } }
                                 Behavior on border.color { ColorAnimation { duration: 150 } }
@@ -991,7 +1078,7 @@ PopupWindow {
                                                 visible: pairedDevCard.isConnected && modelData.battery !== null
                                                 height: 15
                                                 width: pairedBatRow.implicitWidth + 8
-                                                radius: 3
+                                                radius: 0
                                                 color: (modelData.battery !== null && modelData.battery < 25) ? "#2b1a10" : "#132515"
                                                 border.color: (modelData.battery !== null && modelData.battery < 25) ? Theme.amber : Theme.accent
                                                 border.width: 1
@@ -1039,7 +1126,7 @@ PopupWindow {
                                         id: pairedBtn
                                         height: 24
                                         width: pairedBtnRow.implicitWidth + 14
-                                        radius: 5
+                                        radius: 0
                                         anchors.verticalCenter: parent.verticalCenter
 
                                         color: pairedDevCard.isConnecting ? "#2e210a" : (pairedDevCard.isConnected ? (pairedBtnMouse.containsMouse ? "#2d1616" : "#1a1010") : (pairedBtnMouse.containsMouse ? "#18321a" : "#102212"))
@@ -1142,10 +1229,20 @@ PopupWindow {
                         Rectangle {
                             width: parent.width
                             height: 38
-                            radius: 6
+                            radius: 0
                             color: "#09120b"
                             border.color: Theme.separator
+                            border.width: 1
                             visible: popup.btAvailableDevices.length === 0
+
+                            Rectangle { width: 4; height: 1; color: Theme.border; anchors.top: parent.top; anchors.left: parent.left }
+                            Rectangle { width: 1; height: 4; color: Theme.border; anchors.top: parent.top; anchors.left: parent.left }
+                            Rectangle { width: 4; height: 1; color: Theme.border; anchors.top: parent.top; anchors.right: parent.right }
+                            Rectangle { width: 1; height: 4; color: Theme.border; anchors.top: parent.top; anchors.right: parent.right }
+                            Rectangle { width: 4; height: 1; color: Theme.border; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                            Rectangle { width: 1; height: 4; color: Theme.border; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                            Rectangle { width: 4; height: 1; color: Theme.border; anchors.bottom: parent.bottom; anchors.right: parent.right }
+                            Rectangle { width: 1; height: 4; color: Theme.border; anchors.bottom: parent.bottom; anchors.right: parent.right }
 
                             Row {
                                 anchors.centerIn: parent
@@ -1177,7 +1274,7 @@ PopupWindow {
                                 id: availDevCard
                                 width: parent.width
                                 height: 42
-                                radius: 6
+                                radius: 0
                                 
                                 readonly property string devMac: modelData.mac
                                 readonly property string devName: modelData.name || devMac
@@ -1187,6 +1284,17 @@ PopupWindow {
                                 color: isConnecting ? "#19150b" : "#09130b"
                                 border.color: isConnecting ? Theme.amber : Theme.separator
                                 border.width: 1
+
+                                // Esquinas tácticas iluminadas
+                                readonly property color cornerColor: isConnecting ? Theme.amber : Theme.border
+                                Rectangle { width: 5; height: 1; color: availDevCard.cornerColor; anchors.top: parent.top; anchors.left: parent.left }
+                                Rectangle { width: 1; height: 5; color: availDevCard.cornerColor; anchors.top: parent.top; anchors.left: parent.left }
+                                Rectangle { width: 5; height: 1; color: availDevCard.cornerColor; anchors.top: parent.top; anchors.right: parent.right }
+                                Rectangle { width: 1; height: 5; color: availDevCard.cornerColor; anchors.top: parent.top; anchors.right: parent.right }
+                                Rectangle { width: 5; height: 1; color: availDevCard.cornerColor; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                                Rectangle { width: 1; height: 5; color: availDevCard.cornerColor; anchors.bottom: parent.bottom; anchors.left: parent.left }
+                                Rectangle { width: 5; height: 1; color: availDevCard.cornerColor; anchors.bottom: parent.bottom; anchors.right: parent.right }
+                                Rectangle { width: 1; height: 5; color: availDevCard.cornerColor; anchors.bottom: parent.bottom; anchors.right: parent.right }
 
                                 Behavior on color { ColorAnimation { duration: 150 } }
                                 Behavior on border.color { ColorAnimation { duration: 150 } }
@@ -1235,7 +1343,7 @@ PopupWindow {
                                         id: availBtn
                                         height: 22
                                         width: availBtnRow.implicitWidth + 12
-                                        radius: 4
+                                        radius: 0
                                         anchors.verticalCenter: parent.verticalCenter
 
                                         color: availDevCard.isConnecting ? "#2e210a" : (availBtnMouse.containsMouse ? "#18321a" : "#102212")

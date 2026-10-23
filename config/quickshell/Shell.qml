@@ -21,10 +21,18 @@ PanelWindow {
         spacing: 12
 
         Clock {}
-        Weather {}
-    }
 
-    Workspace {}
+        Text {
+            text: "//"
+            font.family: Theme.font
+            font.pixelSize: 10
+            font.bold: true
+            color: Theme.separator
+            anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Workspace {}
+    }
 
     Row {
         id: barRight
@@ -67,10 +75,17 @@ PanelWindow {
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
                 onEntered: ccButton.hovered = true
                 onExited:  ccButton.hovered = false
-                // TODO: onClicked: controlCenter.visible = !controlCenter.visible
+                onClicked: dashboardPopup.visible = !dashboardPopup.visible
             }
         }
+    }
+
+    Dashboard {
+        id: dashboardPopup
+        visible: false
+        parentAnchor: ccButton
     }
 }

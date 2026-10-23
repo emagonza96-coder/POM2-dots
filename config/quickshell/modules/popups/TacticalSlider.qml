@@ -33,7 +33,7 @@ Item {
                 required property int index
                 width: blocksRow.blockWidth
                 height: sliderRoot.dragging ? 12 : 8
-                radius: 1
+                radius: 0
 
                 readonly property bool isActive: index < blocksRow.activeBlocks
                 readonly property bool isOverdrive: sliderRoot.allowOverdrive && index >= 11 // > 100% de volumen
@@ -60,7 +60,7 @@ Item {
         id: grip
         width: 14
         height: sliderRoot.dragging ? 18 : 15
-        radius: 2
+        radius: 0
         color: sliderRoot.dragging ? "#142616" : "#0a130b"
         border.color: sliderRoot.dragging ? Theme.accent : Theme.border
         border.width: 1
