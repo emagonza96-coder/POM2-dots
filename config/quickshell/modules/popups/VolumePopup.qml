@@ -459,7 +459,10 @@ PopupWindow {
                                             text: Math.round(sinkCard.sinkVol * 100) + "%"
                                             font.family: Theme.font
                                             font.pixelSize: 10
-                                            color: sinkCard.sinkMuted ? Theme.muted : Theme.text
+                                            color: sinkCard.sinkMuted ? Theme.muted
+                                                 : sinkCard.sinkVol > 1.25 ? Theme.red
+                                                 : sinkCard.sinkVol > 0.85 ? Theme.amber
+                                                 : Theme.text
                                             anchors.verticalCenter: parent.verticalCenter
                                         }
                                     }
@@ -781,7 +784,10 @@ PopupWindow {
                                         text: Math.round(appCard.appVol * 100) + "%"
                                         font.family: Theme.font
                                         font.pixelSize: 10
-                                        color: appCard.appMuted ? Theme.muted : Theme.text
+                                        color: appCard.appMuted ? Theme.muted
+                                             : appCard.appVol > 1.25 ? Theme.red
+                                             : appCard.appVol > 0.85 ? Theme.amber
+                                             : Theme.text
                                         anchors.verticalCenter: parent.verticalCenter
                                     }
                                 }

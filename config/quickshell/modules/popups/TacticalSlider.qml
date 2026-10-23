@@ -17,9 +17,8 @@ Item {
     readonly property bool dragging: mouseArea.pressed
     readonly property bool hovered: mouseArea.containsMouse
     readonly property real normalized: Math.max(0, Math.min(1.0, maxVal > 0 ? value / maxVal : 0))
-    readonly property int overdriveThreshold: allowOverdrive ? Math.round((1.0 / maxVal) * totalBlocks) : 999
 
-    // Fila de bloques segmentados (VU-meter horizontal táctico POM-2)
+    // Fila de bloques segmentados (VU-meter horizontal táctico POM-2 con variación por intensidad)
     Row {
         id: blocksRow
         anchors.verticalCenter: parent.verticalCenter
@@ -36,7 +35,11 @@ Item {
             Rectangle {
                 required property int index
                 readonly property bool isActive: index < blocksRow.activeBlocks
-                readonly property bool isOverdrive: sliderRoot.allowOverdrive && index >= sliderRoot.overdriveThreshold
+
+                // Cálculo del valor de volumen real que representa este bloque
+                readonly property real blockVal: ((index + 0.5) / sliderRoot.totalBlocks) * sliderRoot.maxVal
+                readonly property bool isCritical: sliderRoot.allowOverdrive && blockVal > 1.25 // > 125% (Rojo / Peligro distorsión)
+                readonly property bool isWarn: !isCritical && blockVal > 0.85                  // > 85%  (Ámbar / Alerta alta ganancia)
 
                 width: blocksRow.blockWidth
                 height: parent.height
@@ -44,16 +47,19 @@ Item {
 
                 color: !isActive ? "#0d180f"
                      : sliderRoot.muted ? Theme.muted
-                     : isOverdrive ? Theme.amber
+                     : isCritical ? (sliderRoot.hovered ? "#ff8585" : Theme.red)
+                     : isWarn     ? (sliderRoot.hovered ? "#ffd280" : Theme.amber)
                      : (sliderRoot.hovered ? "#7cd486" : Theme.accent)
 
                 border.color: !isActive ? "#132416"
                             : sliderRoot.muted ? Theme.muted
-                            : isOverdrive ? Theme.amber
+                            : isCritical ? Theme.red
+                            : isWarn     ? Theme.amber
                             : Theme.border
                 border.width: 1
 
                 Behavior on color { ColorAnimation { duration: 50 } }
+                Behavior on border.color { ColorAnimation { duration: 50 } }
             }
         }
     }
@@ -67,9 +73,14 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         x: Math.max(0, Math.min(sliderRoot.width - width, sliderRoot.normalized * (sliderRoot.width - width)))
 
-        readonly property bool inOverdrive: sliderRoot.allowOverdrive && sliderRoot.normalized >= (sliderRoot.overdriveThreshold / sliderRoot.totalBlocks)
+        // Variación dinámica de color según el volumen actual
+        readonly property real currentVol: sliderRoot.normalized * sliderRoot.maxVal
+        readonly property bool isCritical: sliderRoot.allowOverdrive && currentVol > 1.25
+        readonly property bool isWarn: !isCritical && currentVol > 0.85
+
         readonly property color gripColor: sliderRoot.muted ? Theme.muted
-                                         : inOverdrive ? Theme.amber
+                                         : isCritical ? (sliderRoot.dragging ? "#ff9999" : (sliderRoot.hovered ? "#ff8585" : Theme.red))
+                                         : isWarn     ? (sliderRoot.dragging ? "#ffe099" : (sliderRoot.hovered ? "#ffd280" : Theme.amber))
                                          : (sliderRoot.dragging ? "#a3e8ab" : (sliderRoot.hovered ? "#7cd486" : Theme.accent))
 
         color: levelGrip.gripColor
