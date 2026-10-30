@@ -8,8 +8,26 @@ import "../.."
 PopupWindow {
     id: popup
     property var parentAnchor
-    anchor.item: parentAnchor
-    anchor.edges: Edges.Bottom
+
+    anchor.window: parentAnchor ? parentAnchor.QsWindow.window : null
+    anchor.adjustment: PopupAdjustment.None
+    anchor.gravity: Edges.Bottom | Edges.Right
+
+    anchor.onAnchoring: {
+        if (!parentAnchor) return
+        const popW = popup.implicitWidth > 0 ? popup.implicitWidth : 480
+        const targetX = Math.round((parentAnchor.width - popW) / 2)
+        const pos = parentAnchor.QsWindow.contentItem.mapFromItem(
+            parentAnchor,
+            targetX,
+            parentAnchor.height
+        )
+        anchor.rect.x = pos.x
+        anchor.rect.y = pos.y
+        anchor.rect.width = 0
+        anchor.rect.height = 0
+    }
+
     implicitWidth: 480
     implicitHeight: 330
     color: "transparent"

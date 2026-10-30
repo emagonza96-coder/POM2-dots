@@ -50,7 +50,7 @@ PanelWindow {
     Item {
         id: centralBay
         width: 480
-        anchors.horizontalCenter: parent.horizontalCenter
+        x: Math.round((root.width - width) / 2)
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
