@@ -18,6 +18,8 @@ Item {
         target: ringRoot
         function onValueChanged() { canvas.requestPaint() }
         function onWarningChanged() { canvas.requestPaint() }
+        function onActiveColorChanged() { canvas.requestPaint() }
+        function onWarnColorChanged() { canvas.requestPaint() }
     }
 
     Rectangle {

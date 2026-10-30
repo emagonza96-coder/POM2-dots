@@ -44,7 +44,6 @@ PopupWindow {
     Component.onCompleted: {
         if (visible) {
             container.opacity = 1
-            slideTranslate.y = 0
             statusProc.running = true
             btStatusProc.running = true
         }
@@ -53,13 +52,11 @@ PopupWindow {
     onVisibleChanged: {
         if (visible) {
             fadeIn.start()
-            slideIn.start()
             statusProc.running = true
             btStatusProc.running = true
         } else {
             selectedAppForSinkMenu = -1
             container.opacity = 0
-            slideTranslate.y = -6
         }
     }
 
@@ -68,25 +65,20 @@ PopupWindow {
         id: container
         anchors.fill: parent
         color: Theme.surface
-        border.color: Theme.border
-        border.width: 1
+        border.width: 0
         radius: 0
         clip: true
         opacity: 0
-        transform: Translate { id: slideTranslate; y: -6 }
 
-        // Muescas tácticas iluminadas en las 4 esquinas del popup en verde POM-2
-        Rectangle { width: 6; height: 1; color: Theme.accent; anchors.top: parent.top; anchors.left: parent.left }
-        Rectangle { width: 1; height: 6; color: Theme.accent; anchors.top: parent.top; anchors.left: parent.left }
-        Rectangle { width: 6; height: 1; color: Theme.accent; anchors.top: parent.top; anchors.right: parent.right }
-        Rectangle { width: 1; height: 6; color: Theme.accent; anchors.top: parent.top; anchors.right: parent.right }
-        Rectangle { width: 6; height: 1; color: Theme.accent; anchors.bottom: parent.bottom; anchors.left: parent.left }
-        Rectangle { width: 1; height: 6; color: Theme.accent; anchors.bottom: parent.bottom; anchors.left: parent.left }
-        Rectangle { width: 6; height: 1; color: Theme.accent; anchors.bottom: parent.bottom; anchors.right: parent.right }
-        Rectangle { width: 1; height: 6; color: Theme.accent; anchors.bottom: parent.bottom; anchors.right: parent.right }
+        NumberAnimation { id: fadeIn; target: container; property: "opacity"; from: 0; to: 1; duration: 180; easing.type: Easing.OutQuad }
 
-        NumberAnimation { id: fadeIn;  target: container;      property: "opacity"; from: 0;  to: 1; duration: 180; easing.type: Easing.OutQuad }
-        NumberAnimation { id: slideIn; target: slideTranslate; property: "y";       from: -6; to: 0; duration: 180; easing.type: Easing.OutQuad }
+        // Contorno táctico abierto arriba (fusionado con la barra como una sola pieza)
+        // Borde lateral izquierdo continuo que sube hasta la barra
+        Rectangle { width: 1; color: Theme.border; anchors.left: parent.left; anchors.top: parent.top; anchors.bottom: parent.bottom }
+        // Borde lateral derecho continuo que sube hasta la barra
+        Rectangle { width: 1; color: Theme.border; anchors.right: parent.right; anchors.top: parent.top; anchors.bottom: parent.bottom }
+        // Borde inferior que cierra la bahía
+        Rectangle { height: 1; color: Theme.border; anchors.bottom: parent.bottom; anchors.left: parent.left; anchors.right: parent.right }
 
         Flickable {
             id: scrollArea

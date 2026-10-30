@@ -1,0 +1,42 @@
+{
+  "pom2-agent-hud": {
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "/home/emn/.local/bin/pom2-agy-hook PreInvocation",
+        "timeout": 2
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/emn/.local/bin/pom2-agy-hook PreToolUse",
+            "timeout": 2
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/emn/.local/bin/pom2-agy-hook PostToolUse",
+            "timeout": 2
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "/home/emn/.local/bin/pom2-agy-hook Stop",
+        "timeout": 2
+      }
+    ]
+  }
+}
