@@ -8,14 +8,8 @@ import "../.."
 PopupWindow {
     id: popup
     property var parentAnchor
-    property var rootWindow: null
-
-    anchor.window: rootWindow
-    anchor.rect.x: rootWindow ? Math.round((rootWindow.width / 2) - (popup.implicitWidth / 2)) : 0
-    anchor.rect.y: rootWindow ? rootWindow.height : 0
-    anchor.item: rootWindow ? null : parentAnchor
-    anchor.edges: rootWindow ? 0 : Edges.Bottom
-
+    anchor.item: parentAnchor
+    anchor.edges: Edges.Bottom
     implicitWidth: 480
     implicitHeight: 330
     color: "transparent"
@@ -119,7 +113,6 @@ PopupWindow {
     onVisibleChanged: {
         if (visible) {
             fadeIn.start()
-            slideIn.start()
             if (!notifCountProc.running) notifCountProc.running = true
             if (!notifListProc.running) notifListProc.running = true
             if (!brightStatusProc.running) brightStatusProc.running = true
@@ -129,7 +122,6 @@ PopupWindow {
             if (currentTab === "agent" && !dashAgentProc.running) dashAgentProc.running = true
         } else {
             container.opacity = 0
-            slideTranslate.y = -6
         }
     }
 
@@ -141,10 +133,8 @@ PopupWindow {
         radius: 0
         clip: true
         opacity: 0
-        transform: Translate { id: slideTranslate; y: -6 }
 
-        NumberAnimation { id: fadeIn;  target: container;      property: "opacity"; from: 0;  to: 1; duration: 180; easing.type: Easing.OutQuad }
-        NumberAnimation { id: slideIn; target: slideTranslate; property: "y";       from: -6; to: 0; duration: 180; easing.type: Easing.OutQuad }
+        NumberAnimation { id: fadeIn; target: container; property: "opacity"; from: 0; to: 1; duration: 180; easing.type: Easing.OutQuad }
 
         // Contorno táctico abierto arriba (fusionado con la barra como una sola pieza)
         // Borde lateral izquierdo continuo que sube hasta la barra y empalma con barBorderLeft
