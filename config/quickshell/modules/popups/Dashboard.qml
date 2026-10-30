@@ -8,8 +8,14 @@ import "../.."
 PopupWindow {
     id: popup
     property var parentAnchor
-    anchor.item: parentAnchor
-    anchor.edges: Edges.Bottom
+    property var rootWindow: null
+
+    anchor.window: rootWindow
+    anchor.rect.x: rootWindow ? Math.round((rootWindow.width / 2) - (popup.implicitWidth / 2)) : 0
+    anchor.rect.y: rootWindow ? rootWindow.height : 0
+    anchor.item: rootWindow ? null : parentAnchor
+    anchor.edges: rootWindow ? 0 : Edges.Bottom
+
     implicitWidth: 480
     implicitHeight: 330
     color: "transparent"
@@ -131,8 +137,7 @@ PopupWindow {
         id: container
         anchors.fill: parent
         color: Theme.surface
-        border.color: Theme.border
-        border.width: 1
+        border.width: 0
         radius: 0
         clip: true
         opacity: 0
@@ -141,11 +146,15 @@ PopupWindow {
         NumberAnimation { id: fadeIn;  target: container;      property: "opacity"; from: 0;  to: 1; duration: 180; easing.type: Easing.OutQuad }
         NumberAnimation { id: slideIn; target: slideTranslate; property: "y";       from: -6; to: 0; duration: 180; easing.type: Easing.OutQuad }
 
-        // Muescas tácticas iluminadas en las 4 esquinas del popup en verde POM-2
-        Rectangle { width: 6; height: 1; color: Theme.accent; anchors.top: parent.top; anchors.left: parent.left }
-        Rectangle { width: 1; height: 6; color: Theme.accent; anchors.top: parent.top; anchors.left: parent.left }
-        Rectangle { width: 6; height: 1; color: Theme.accent; anchors.top: parent.top; anchors.right: parent.right }
-        Rectangle { width: 1; height: 6; color: Theme.accent; anchors.top: parent.top; anchors.right: parent.right }
+        // Contorno táctico abierto arriba (fusionado con la barra como una sola pieza)
+        // Borde lateral izquierdo continuo que sube hasta la barra y empalma con barBorderLeft
+        Rectangle { width: 1; color: Theme.border; anchors.left: parent.left; anchors.top: parent.top; anchors.bottom: parent.bottom }
+        // Borde lateral derecho continuo que sube hasta la barra y empalma con barBorderRight
+        Rectangle { width: 1; color: Theme.border; anchors.right: parent.right; anchors.top: parent.top; anchors.bottom: parent.bottom }
+        // Borde inferior que cierra la bahía inferior del Dashboard
+        Rectangle { height: 1; color: Theme.border; anchors.bottom: parent.bottom; anchors.left: parent.left; anchors.right: parent.right }
+
+        // Muescas tácticas iluminadas en verde POM-2 en las 2 esquinas inferiores (las superiores conectan con la barra)
         Rectangle { width: 6; height: 1; color: Theme.accent; anchors.bottom: parent.bottom; anchors.left: parent.left }
         Rectangle { width: 1; height: 6; color: Theme.accent; anchors.bottom: parent.bottom; anchors.left: parent.left }
         Rectangle { width: 6; height: 1; color: Theme.accent; anchors.bottom: parent.bottom; anchors.right: parent.right }

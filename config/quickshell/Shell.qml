@@ -66,6 +66,7 @@ PanelWindow {
         id: dashboardPopup
         visible: false
         parentAnchor: centralBay
+        rootWindow: root
     }
 
     // Contorno táctico de la barra fusionado con el Dashboard
